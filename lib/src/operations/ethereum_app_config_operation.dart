@@ -4,6 +4,7 @@ import 'package:ledger_ethereum/src/ethereum_app_config.dart';
 import 'package:ledger_ethereum/src/ledger/ethereum_instructions.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
 
+/// This command returns specific application configuration
 class EthereumAppConfigOperation extends LedgerOperation<EthereumAppConfig> {
   final bool display = false;
 
@@ -23,7 +24,7 @@ class EthereumAppConfigOperation extends LedgerOperation<EthereumAppConfig> {
   @override
   Future<List<Uint8List>> write(ByteDataWriter writer) async {
     writer.writeUint8(ethCLA);
-    writer.writeUint8(0x06);
+    writer.writeUint8(appConfigINS);
     writer.writeUint8(0x00);
     writer.writeUint8(0x00);
 

@@ -6,6 +6,13 @@ import 'package:ledger_ethereum/src/ledger/ethereum_instructions.dart';
 import 'package:ledger_ethereum/src/ledger/ledger_input_operation.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
 
+///This command provides a trusted description of an NFT to associate a contract address with a collectionName.
+///
+/// It shall be run immediately before performing a transaction involving a contract calling this contract address to
+/// display the proper nft information to the user if necessary, as marked in GET APP CONFIGURATION flags.
+///
+/// The signature is computed on:
+/// type || version || len(collectionName) || collectionName || address || chainId || keyId || algorithmId
 class EthereumProvideNFTInformationOperation
     extends LedgerInputOperation<void> {
 
@@ -27,7 +34,7 @@ class EthereumProvideNFTInformationOperation
     this.keyId = 0x01,
     this.algorithmId = 0x01,
     required this.collectionInformationSignature,
-  }) : super(ethCLA, 0x0A);
+  }) : super(ethCLA, provideNFTInformationINS);
 
   @override
   Future<void> read(ByteDataReader reader) async {}

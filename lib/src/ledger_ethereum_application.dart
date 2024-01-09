@@ -47,6 +47,16 @@ class EthereumLedgerApp extends LedgerApp {
         transformer: transformer,
       );
 
+  /// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
+  ///
+  /// This command signs an Ethereum transaction after having the user validate the following parameters
+  ///
+  /// Gas price
+  /// Gas limit
+  /// Recipient address
+  /// Value
+  ///
+  /// The input data is the RLP encoded transaction, without v/r/s present.
   @override
   Future<Uint8List> signTransaction(
           LedgerDevice device, Uint8List transaction) =>
@@ -56,22 +66,30 @@ class EthereumLedgerApp extends LedgerApp {
         transformer: transformer,
       );
 
+  /// This command signs a list of Ethereum transactions after having the user validate the following parameters of
+  /// each transaction
+  ///
+  /// Gas price
+  /// Gas limit
+  /// Recipient address
+  /// Value
+  ///
+  /// The input data is a list of the RLP encoded transactions, without v/r/s present.
   @override
   Future<List<Uint8List>> signTransactions(
       LedgerDevice device, List<Uint8List> transactions) async {
     final signatures = <Uint8List>[];
     for (var transaction in transactions) {
-      final signature = await ledger.sendOperation<Uint8List>(
-        device,
-        EthereumSignTxOperation(transaction, derivationPath: derivationPath),
-        transformer: transformer,
-      );
+      final signature = await signTransaction(device, transaction);
       signatures.add(signature);
     }
     return signatures;
   }
 
-  /// Signs a message according to eth_sign RPC call and retrieves v, r, s given the message and the BIP 32 path of the account to sign.
+  /// This command signs an Ethereum message following the personal_sign specification (ethereum/go-ethereum#2940) after
+  /// having the user validate the SHA-256 hash of the message being signed.
+  ///
+  /// This command has been supported since firmware version 1.0.8
   ///
   /// v = sig[0].toInt()
   /// r = sig.sublist(1, 1 + 32).toHexString();
@@ -83,6 +101,17 @@ class EthereumLedgerApp extends LedgerApp {
         transformer: transformer,
       );
 
+  /// This command provides a trusted description of an ERC 20 token to associate a contract address with a ticker and
+  /// number of decimals.
+  ///
+  /// It shall be run immediately before performing a transaction involving a contract calling this contract address to
+  /// display the proper token information to the user if necessary, as marked in [getAppConfig] flags.
+  ///
+  /// The signature is computed on
+  /// ticker || address || number of decimals (uint4be) || chainId (uint4be)
+  ///
+  /// signed by the following secp256k1 public key
+  /// 0482bbf2f34f367b2e5bc21847b6566f21f0976b22d3388a9a5e446ac62d25cf725b62a2555b2dd464a4da0ab2f4d506820543af1d242470b1b1a969a27578f353
   Future<void> provideERC20TokenInformation(
     LedgerDevice device, {
     required String erc20Ticker,
@@ -120,6 +149,13 @@ class EthereumLedgerApp extends LedgerApp {
         tokenInformationSignature: tokenInformationSignature);
   }
 
+  ///This command provides a trusted description of an NFT to associate a contract address with a collectionName.
+  ///
+  /// It shall be run immediately before performing a transaction involving a contract calling this contract address to
+  /// display the proper nft information to the user if necessary, as marked in GET APP CONFIGURATION flags.
+  ///
+  /// The signature is computed on:
+  /// type || version || len(collectionName) || collectionName || address || chainId || keyId || algorithmId
   Future<void> provideNFTInformation(
     LedgerDevice device, {
     required int type,

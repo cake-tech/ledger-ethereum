@@ -7,6 +7,7 @@ import 'package:ledger_ethereum/src/utils/bip32_path_to_buffer.dart';
 import 'package:ledger_ethereum/src/utils/string_uint8list_extension.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
 
+/// This command returns the public key and Ethereum address for the given BIP 32 path.
 class EthereumWalletAddressOperation
     extends LedgerInputOperation<(String, String, String?)> {
   /// If [displayPublicKey] is set to true the Public Key will be shown to the user on the ledger device
@@ -24,7 +25,7 @@ class EthereumWalletAddressOperation
       {this.displayPublicKey = false,
       this.returnChainCode = true,
       this.derivationPath = "m/44'/60'/0'/0/0"})
-      : super(ethCLA, 0x2);
+      : super(ethCLA, walletAddressINS);
 
   @override
   Future<(String, String, String?)> read(ByteDataReader reader) async {

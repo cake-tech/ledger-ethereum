@@ -5,6 +5,18 @@ import 'package:ledger_ethereum/src/utils/bip32_path_helper.dart';
 import 'package:ledger_ethereum/src/utils/bip32_path_to_buffer.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
 
+/// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
+///
+/// This command signs an Ethereum transaction after having the user validate the following parameters
+///
+/// Gas price
+/// Gas limit
+/// Recipient address
+/// Value
+///
+/// The input data is the RLP encoded transaction
+/// (as per https://github.com/ethereum/pyethereum/blob/develop/ethereum/transactions.py#L22), without v/r/s present,
+/// streamed to the device in 255 bytes maximum data chunks.
 class EthereumSignTxOperation
     extends LedgerOperation<Uint8List> {
   /// The [derivationPath] is a Bip32-path used to derive the public key/Address
@@ -32,7 +44,7 @@ class EthereumSignTxOperation
     final writer = ByteDataWriter();
 
     writer.writeUint8(ethCLA);
-    writer.writeUint8(0x04);
+    writer.writeUint8(signTxINS);
     writer.writeUint8(0x80);
     writer.writeUint8(0x00);
 
@@ -48,7 +60,7 @@ class EthereumSignTxOperation
     final outputs = <Uint8List>[];
 
     writer.writeUint8(ethCLA);
-    writer.writeUint8(0x04);
+    writer.writeUint8(signTxINS);
     writer.writeUint8(0x00);
     writer.writeUint8(0x00);
 
