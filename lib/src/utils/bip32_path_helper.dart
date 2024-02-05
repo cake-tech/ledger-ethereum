@@ -25,7 +25,7 @@ class BIPPath {
     var path = text.split('/');
     var ret = <int>[];
     for (var i = 0; i < path.length; i++) {
-      var tmp = RegExp(r"(\d+)([hH']?)").firstMatch(path[i])!;
+      final tmp = RegExp(r"(\d+)([hH']?)").firstMatch(path[i])!;
       ret.add(int.parse(tmp.group(1)!, radix: 10));
       if (ret[i] >= hardened) {
         throw Exception('Invalid child index');
@@ -44,8 +44,8 @@ class BIPPath {
 
   @override
   String toString({bool noRoot = false, bool oldStyle = false}) {
-    var ret = <String>[];
-    for (var value in _path) {
+    final ret = <String>[];
+    for (final value in _path) {
       if (value & hardened > 0) {
         ret.add('${value & ~hardened}${oldStyle ? 'h' : '\''}');
       } else {

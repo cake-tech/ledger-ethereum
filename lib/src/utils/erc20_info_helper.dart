@@ -31,7 +31,7 @@ Future<(String, int, String)> getERC20Signatures(
 Map<String, _TokenInfo> _parse(String erc20SignaturesBlob) {
   final buf = base64.decode(erc20SignaturesBlob);
 
-  var map = <String, _TokenInfo>{};
+  final map = <String, _TokenInfo>{};
   var i = 0;
 
   while (i < buf.length) {

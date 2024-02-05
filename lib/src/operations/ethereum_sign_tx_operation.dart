@@ -17,8 +17,7 @@ import 'package:ledger_flutter/ledger_flutter.dart';
 /// The input data is the RLP encoded transaction
 /// (as per https://github.com/ethereum/pyethereum/blob/develop/ethereum/transactions.py#L22), without v/r/s present,
 /// streamed to the device in 255 bytes maximum data chunks.
-class EthereumSignTxOperation
-    extends LedgerOperation<Uint8List> {
+class EthereumSignTxOperation extends LedgerOperation<Uint8List> {
   /// The [derivationPath] is a Bip32-path used to derive the public key/Address
   /// If the path is not standard, an error is returned
   final String derivationPath;
@@ -41,16 +40,13 @@ class EthereumSignTxOperation
   }
 
   Uint8List createNextChunk(int offset, int chunkSize) {
-    final writer = ByteDataWriter();
-
-    writer.writeUint8(ethCLA);
-    writer.writeUint8(signTxINS);
-    writer.writeUint8(0x80);
-    writer.writeUint8(0x00);
-
-    writer.writeUint8(chunkSize);
-
-    writer.write(rawTx.sublist(offset, offset + chunkSize));
+    final writer = ByteDataWriter()
+      ..writeUint8(ethCLA)
+      ..writeUint8(signTxINS)
+      ..writeUint8(0x80)
+      ..writeUint8(0x00)
+      ..writeUint8(chunkSize)
+      ..write(rawTx.sublist(offset, offset + chunkSize));
 
     return writer.toBytes();
   }
@@ -59,10 +55,11 @@ class EthereumSignTxOperation
   Future<List<Uint8List>> write(ByteDataWriter writer) async {
     final outputs = <Uint8List>[];
 
-    writer.writeUint8(ethCLA);
-    writer.writeUint8(signTxINS);
-    writer.writeUint8(0x00);
-    writer.writeUint8(0x00);
+    writer
+      ..writeUint8(ethCLA)
+      ..writeUint8(signTxINS)
+      ..writeUint8(0x00)
+      ..writeUint8(0x00);
 
     final path = BIPPath.fromString(derivationPath).toPathArray();
 
@@ -74,7 +71,8 @@ class EthereumSignTxOperation
     var offset = 0;
     final firstChunkMaxSize = 150 - 1 - path.length * 4;
     final firstChunkSize = offset + firstChunkMaxSize > rawTx.length
-        ? rawTx.length : firstChunkMaxSize;
+        ? rawTx.length
+        : firstChunkMaxSize;
 
     // Write first chunk
     dwriter.write(rawTx.sublist(0, firstChunkSize));

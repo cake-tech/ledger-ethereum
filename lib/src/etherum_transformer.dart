@@ -24,8 +24,8 @@ class EthereumTransformer extends LedgerTransformer {
 
     final output = <Uint8List>[];
 
-    for (var data in transform) {
-      int offset = (data.length >= 2) ? 2 : 0;
+    for (final data in transform) {
+      final offset = (data.length >= 2) ? 2 : 0;
       output.add(data.sublist(0, data.length - offset));
     }
 

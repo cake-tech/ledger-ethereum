@@ -11,8 +11,7 @@ import 'package:ledger_flutter/ledger_flutter.dart';
 /// This command has been supported since firmware version 1.0.8
 ///
 /// The input data is the message to sign, streamed to the device in 255 bytes maximum data chunks
-class EthereumSignMsgOperation
-    extends LedgerOperation<Uint8List> {
+class EthereumSignMsgOperation extends LedgerOperation<Uint8List> {
   /// The [derivationPath] is a Bip32-path used to derive the public key/Address
   /// If the path is not standard, an error is returned
   final String derivationPath;
@@ -35,16 +34,13 @@ class EthereumSignMsgOperation
   }
 
   Uint8List createNextChunk(int offset, int chunkSize) {
-    final writer = ByteDataWriter();
-
-    writer.writeUint8(ethCLA);
-    writer.writeUint8(signMsgINS);
-    writer.writeUint8(0x80);
-    writer.writeUint8(0x00);
-
-    writer.writeUint8(chunkSize);
-
-    writer.write(message.sublist(offset, offset + chunkSize));
+    final writer = ByteDataWriter()
+      ..writeUint8(ethCLA)
+      ..writeUint8(signMsgINS)
+      ..writeUint8(0x80)
+      ..writeUint8(0x00)
+      ..writeUint8(chunkSize)
+      ..write(message.sublist(offset, offset + chunkSize));
 
     return writer.toBytes();
   }
@@ -53,20 +49,21 @@ class EthereumSignMsgOperation
   Future<List<Uint8List>> write(ByteDataWriter writer) async {
     final outputs = <Uint8List>[];
 
-    writer.writeUint8(ethCLA);
-    writer.writeUint8(signMsgINS);
-    writer.writeUint8(0x00);
-    writer.writeUint8(0x00);
+    writer
+      ..writeUint8(ethCLA)
+      ..writeUint8(signMsgINS)
+      ..writeUint8(0x00)
+      ..writeUint8(0x00);
 
     final path = BIPPath.fromString(derivationPath).toPathArray();
 
-    final dataWriter = ByteDataWriter();
-    dataWriter.write(packDerivationPath(path));
+    final dataWriter = ByteDataWriter()..write(packDerivationPath(path));
 
     var offset = 0;
     final firstChunkMaxSize = 150 - 1 - path.length - 4 * 4;
     final firstChunkSize = offset + firstChunkMaxSize > message.length
-        ? message.length : firstChunkMaxSize;
+        ? message.length
+        : firstChunkMaxSize;
 
     // Write first chunk
     dataWriter.writeUint32(message.length);

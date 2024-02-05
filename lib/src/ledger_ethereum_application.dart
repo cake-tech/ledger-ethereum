@@ -13,7 +13,7 @@ import 'package:ledger_ethereum/src/utils/nft_info_helper.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
 
 class EthereumLedgerApp extends LedgerApp {
-  EthereumTransformer transformer;
+  final EthereumTransformer transformer;
 
   /// The [derivationPath] is a Bip32-path used to derive the public key/Address
   /// If the path is not standard, an error is returned
@@ -79,7 +79,7 @@ class EthereumLedgerApp extends LedgerApp {
   Future<List<Uint8List>> signTransactions(
       LedgerDevice device, List<Uint8List> transactions) async {
     final signatures = <Uint8List>[];
-    for (var transaction in transactions) {
+    for (final transaction in transactions) {
       final signature = await signTransaction(device, transaction);
       signatures.add(signature);
     }

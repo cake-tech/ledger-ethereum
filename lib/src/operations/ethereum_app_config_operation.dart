@@ -23,10 +23,11 @@ class EthereumAppConfigOperation extends LedgerOperation<EthereumAppConfig> {
 
   @override
   Future<List<Uint8List>> write(ByteDataWriter writer) async {
-    writer.writeUint8(ethCLA);
-    writer.writeUint8(appConfigINS);
-    writer.writeUint8(0x00);
-    writer.writeUint8(0x00);
+    writer
+      ..writeUint8(ethCLA)
+      ..writeUint8(appConfigINS)
+      ..writeUint8(0x00)
+      ..writeUint8(0x00);
 
     return [writer.toBytes()];
   }

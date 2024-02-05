@@ -7,7 +7,7 @@ Uint8List packDerivationPath(List<int> path) {
 
   inputWriter.writeUint8(path.length); // Write length of the derivation path
 
-  for (var element in path) {
+  for (final element in path) {
     inputWriter.writeUint32(element); // Add each part of the path
   }
 

@@ -15,7 +15,6 @@ import 'package:ledger_flutter/ledger_flutter.dart';
 /// type || version || len(collectionName) || collectionName || address || chainId || keyId || algorithmId
 class EthereumProvideNFTInformationOperation
     extends LedgerInputOperation<void> {
-
   final int type;
   final int version;
   final String collectionName;
@@ -47,22 +46,17 @@ class EthereumProvideNFTInformationOperation
 
   @override
   Future<Uint8List> writeInputData() async {
-    final dataWriter = ByteDataWriter();
-
-    dataWriter.writeUint8(type);
-    dataWriter.writeUint8(version);
-    dataWriter.writeUint8(collectionName.length);
-
-    dataWriter.write(ascii.encode(collectionName));
-    dataWriter.write(hex.decode(collectionAddress));
-
-    dataWriter.writeUint64(chainId);
-
-    dataWriter.writeUint8(keyId);
-    dataWriter.writeUint8(algorithmId);
-
-    dataWriter.writeUint8(collectionInformationSignature.length);
-    dataWriter.write(hex.decode(collectionInformationSignature));
+    final dataWriter = ByteDataWriter()
+      ..writeUint8(type)
+      ..writeUint8(version)
+      ..writeUint8(collectionName.length)
+      ..write(ascii.encode(collectionName))
+      ..write(hex.decode(collectionAddress))
+      ..writeUint64(chainId)
+      ..writeUint8(keyId)
+      ..writeUint8(algorithmId)
+      ..writeUint8(collectionInformationSignature.length)
+      ..write(hex.decode(collectionInformationSignature));
 
     return dataWriter.toBytes();
   }

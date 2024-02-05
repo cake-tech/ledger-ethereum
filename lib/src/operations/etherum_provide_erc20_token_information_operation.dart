@@ -44,17 +44,13 @@ class EthereumProvideERC20TokenInformationOperation
 
   @override
   Future<Uint8List> writeInputData() async {
-    final dataWriter = ByteDataWriter();
-
-    dataWriter.writeUint8(erc20Ticker.length);
-
-    dataWriter.write(ascii.encode(erc20Ticker));
-    dataWriter.write(hex.decode(erc20ContractAddress));
-
-    dataWriter.writeUint32(decimals);
-    dataWriter.writeUint32(chainId);
-
-    dataWriter.write(hex.decode(tokenInformationSignature));
+    final dataWriter = ByteDataWriter()
+      ..writeUint8(erc20Ticker.length)
+      ..write(ascii.encode(erc20Ticker))
+      ..write(hex.decode(erc20ContractAddress))
+      ..writeUint32(decimals)
+      ..writeUint32(chainId)
+      ..write(hex.decode(tokenInformationSignature));
 
     return dataWriter.toBytes();
   }
