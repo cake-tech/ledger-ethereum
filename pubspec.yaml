@@ -1,7 +1,7 @@
 name: ledger_ethereum
 description: A Ledger App Plugin for Ethereum
-version: 0.0.1
-# repository: https://github.com/my_org/my_repo
+version: 0.0.2
+repository: https://github.com/cake-tech/ledger-ethereum
 
 environment:
   sdk: ^3.0.6

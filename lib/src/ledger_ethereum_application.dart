@@ -26,11 +26,11 @@ class EthereumLedgerApp extends LedgerApp {
   });
 
   @override
-  Future<List<String>> getAccounts(LedgerDevice device) async {
+  Future<List<String>> getAccounts(LedgerDevice device, {String? accountsDerivationPath}) async {
     final (_, address, _) =
-        await ledger.sendOperation<(String, String, String?)>(
+    await ledger.sendOperation<(String, String, String?)>(
       device,
-      EthereumWalletAddressOperation(derivationPath: derivationPath),
+      EthereumWalletAddressOperation(derivationPath: accountsDerivationPath ?? derivationPath),
       transformer: transformer,
     );
     return [address];
