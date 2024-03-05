@@ -8,6 +8,7 @@ import 'package:ledger_ethereum/src/operations/ethereum_sign_tx_operation.dart';
 import 'package:ledger_ethereum/src/operations/etherum_provide_erc20_token_information_operation.dart';
 import 'package:ledger_ethereum/src/operations/etherum_provide_nft_information_operation.dart';
 import 'package:ledger_ethereum/src/operations/etherum_wallet_address_operation.dart';
+import 'package:ledger_ethereum/src/utils/contract_address_helper.dart';
 import 'package:ledger_ethereum/src/utils/erc20_info_helper.dart';
 import 'package:ledger_ethereum/src/utils/nft_info_helper.dart';
 import 'package:ledger_flutter/ledger_flutter.dart';
@@ -124,7 +125,7 @@ class EthereumLedgerApp extends LedgerApp {
         device,
         EthereumProvideERC20TokenInformationOperation(
             erc20Ticker: erc20Ticker,
-            erc20ContractAddress: erc20ContractAddress,
+            erc20ContractAddress: asShortenedContractAddress(erc20ContractAddress),
             decimals: decimals,
             chainId: chainId,
             tokenInformationSignature: tokenInformationSignature),

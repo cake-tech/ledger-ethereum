@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
 import 'package:http/http.dart' as http;
@@ -53,11 +54,13 @@ Map<String, _TokenInfo> _parse(String erc20SignaturesBlob) {
     final signature = hex.encode(item.sublist(j));
 
     map["$chainId:$contractAddress"] = _TokenInfo(
-        ticker: ticker,
-        contractAddress: contractAddress,
-        decimals: decimals,
-        chainId: chainId,
-        signature: signature);
+      ticker: ticker,
+      contractAddress: contractAddress,
+      decimals: decimals,
+      chainId: chainId,
+      signature: signature,
+      data: item,
+    );
     i += length;
   }
 
@@ -70,6 +73,7 @@ class _TokenInfo {
   final int decimals;
   final int chainId;
   final String signature;
+  final Uint8List data;
 
   _TokenInfo({
     required this.ticker,
@@ -77,5 +81,6 @@ class _TokenInfo {
     required this.decimals,
     required this.chainId,
     required this.signature,
+    required this.data,
   });
 }
